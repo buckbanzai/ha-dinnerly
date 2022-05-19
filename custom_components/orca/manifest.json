@@ -2,8 +2,9 @@
   "domain": "orca",
   "name": "Orca Card",
   "documentation": "https://github.com/buckbanzai/ha-orca",
+  "issue_tracker": "https://github.com/buckbanzai/ha-orca/issues",
   "dependencies": [],
-  "codeowners": [],
+  "codeowners": ["@balloob"],
   "requirements": ["requests"],
   "iot_class": "cloud_polling",
   "version": "0.1"
