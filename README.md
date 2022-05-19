@@ -1,6 +1,6 @@
-# Orca Card Sensor
+# ORCA Card Sensor
 
-This custom components provides a sensor for each [Orca card](https://en.wikipedia.org/wiki/ORCA_card) you configure, which shows the current balance on the card.
+This custom components provides a sensor for each [ORCA card](https://en.wikipedia.org/wiki/ORCA_card) you configure, which shows the current balance on the card.
 
 [![GitHub Release][releases-shield]][releases]
 [![License][license-shield]](LICENSE.md)
