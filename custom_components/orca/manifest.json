@@ -4,7 +4,7 @@
   "documentation": "https://github.com/buckbanzai/ha-orca",
   "dependencies": [],
   "codeowners": [],
-  "requirements": ["requests","beautifulsoup4"],
+  "requirements": ["requests"],
   "iot_class": "cloud_polling",
   "version": "0.1"
 }
