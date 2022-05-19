@@ -108,7 +108,11 @@ class OrcaCard(Entity):
             'https://api.prod.orca.connext.com/smw/1.0.0/transitAccounts', headers=headers)
 
         first_transit_account = account_result.json()['data'][0]
+        card_balance = first_transit_account['balance']
 
-        self._state = first_transit_account['balance']
+        if card_balance == None:
+            card_balance = 0
+
+        self._state = "${:,.2f}".format(card_balance/100)
         self._attributes["Card Number"] = self._cardnumber
         self._attributes["Card Type"] = first_transit_account['cardTypeName']
