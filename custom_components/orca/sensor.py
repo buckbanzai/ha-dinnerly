@@ -12,7 +12,7 @@ from homeassistant.util import Throttle
 import homeassistant.helpers.config_validation as cv
 
 
-MIN_TIME_BETWEEN_UPDATES = timedelta(minutes=5)
+MIN_TIME_BETWEEN_UPDATES = timedelta(hours=1)
 
 _LOGGER = logging.getLogger(__name__)
 CONF_CARDNUMBER = 'card_number'
