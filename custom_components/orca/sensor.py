@@ -1,29 +1,31 @@
 """Platform for sensor integration."""
 import logging
-import voluptuous as vol
 import uuid
-import requests
 from datetime import timedelta
 
-from homeassistant.const import (CONF_FRIENDLY_NAME, CONF_STATE)
-from homeassistant.helpers.entity import Entity
-from homeassistant.components.sensor import PLATFORM_SCHEMA
-from homeassistant.util import Throttle
 import homeassistant.helpers.config_validation as cv
+import requests
+import voluptuous as vol
+from homeassistant.components.sensor import PLATFORM_SCHEMA
+from homeassistant.const import CONF_FRIENDLY_NAME
+from homeassistant.helpers.entity import Entity
+from homeassistant.util import Throttle
 
 
 MIN_TIME_BETWEEN_UPDATES = timedelta(hours=1)
 
 _LOGGER = logging.getLogger(__name__)
-CONF_CARDNUMBER = 'card_number'
-CONF_SECURITY_CODE = 'security_code'
+CONF_CARDNUMBER = "card_number"
+CONF_SECURITY_CODE = "security_code"
 
 # Validation of the user's configuration
-PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
-    vol.Required(CONF_CARDNUMBER): cv.string,
-    vol.Required(CONF_SECURITY_CODE): cv.string,
-    vol.Optional(CONF_FRIENDLY_NAME): cv.string
-})
+PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
+    {
+        vol.Required(CONF_CARDNUMBER): cv.string,
+        vol.Required(CONF_SECURITY_CODE): cv.string,
+        vol.Optional(CONF_FRIENDLY_NAME): cv.string,
+    }
+)
 
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
@@ -48,7 +50,7 @@ class OrcaCard(Entity):
     @property
     def entity_id(self):
         """Return the name of the sensor."""
-        name = "sensor.orca_card_"+self._cardnumber
+        name = "sensor.orca_card_" + self._cardnumber
         return name
 
     @property
@@ -84,35 +86,37 @@ class OrcaCard(Entity):
         This is the only method that should fetch new data for Home Assistant.
         """
         headers = {
-            'User-Agent': 'myORCA/1 CFNetwork/1333.0.4 Darwin/21.5.0',
-            'Accept': '*/*',
-            'Content-Type': 'application/x-www-form-urlencoded'
+            "User-Agent": "myORCA/1 CFNetwork/1333.0.4 Darwin/21.5.0",
+            "Accept": "*/*",
+            "Content-Type": "application/x-www-form-urlencoded",
         }
 
         uppercase_uuid = str(uuid.uuid4()).upper()
-        token_body = {'grant_type': 'mobilevario_guest',
-                      'username': self._cardnumber,
-                      'password': self._security_code,
-                      'balance_protection_code': '',
-                      'client_id': 'us0hrpbDc0AIOKmqCytWODwWkq4a',
-                      'scope': 'device_'+uppercase_uuid
-                      }
-        token_result = requests.post(
-            'https://api.prod.orca.connext.com/token', data=token_body, headers=headers)
+        token_body = {
+            "grant_type": "mobilevario_guest",
+            "username": self._cardnumber,
+            "password": self._security_code,
+            "balance_protection_code": "",
+            "client_id": "us0hrpbDc0AIOKmqCytWODwWkq4a",
+            "scope": "device_" + uppercase_uuid,
+        }
+        token_uri = "https://api.prod.orca.connext.com/token"
+        token = requests.post(token_uri, data=token_body, headers=headers)
 
-        headers['Content-Type'] = 'application/json'
-        headers['Authorization'] = 'Bearer ' + \
-            token_result.json()['access_token']
+        headers["Content-Type"] = "application/json"
+        headers["Authorization"] = "Bearer " + token.json()["access_token"]
 
         account_result = requests.get(
-            'https://api.prod.orca.connext.com/smw/1.0.0/transitAccounts', headers=headers)
+            "https://api.prod.orca.connext.com/smw/1.0.0/transitAccounts",
+            headers=headers,
+        )
 
-        first_transit_account = account_result.json()['data'][0]
-        card_balance = first_transit_account['balance']
+        first_transit_account = account_result.json()["data"][0]
+        card_balance = first_transit_account["balance"]
 
-        if card_balance == None:
+        if card_balance is None:
             card_balance = 0
 
-        self._state = "${:,.2f}".format(card_balance/100)
+        self._state = "${:,.2f}".format(card_balance / 100)
         self._attributes["Card Number"] = self._cardnumber
-        self._attributes["Card Type"] = first_transit_account['cardTypeName']
+        self._attributes["Card Type"] = first_transit_account["cardTypeName"]
