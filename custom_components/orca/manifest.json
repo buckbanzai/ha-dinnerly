@@ -7,5 +7,5 @@
   "codeowners": ["@balloob"],
   "requirements": ["requests"],
   "iot_class": "cloud_polling",
-  "version": "0.1"
+  "version": "2022.5.2"
 }
