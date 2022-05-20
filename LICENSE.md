@@ -1,6 +1,6 @@
 MIT License
 
-Copyright for portions of ha-orca are held by Ryan Macdonald, 2020 as part of project Home-Assistant-Marta. All other copyright for ha-orca is held by Liam Steckler, 2022.
+Copyright for portions of ha-dinnerly are held by Ryan Macdonald, 2020 as part of project Home-Assistant-Marta. All other copyright for ha-dinnerly is held by Liam Steckler, 2022.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
